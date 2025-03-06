@@ -14,7 +14,7 @@ When you and another person (like a partner, roommate, or family member) share e
 
 Before using this tool, both parties need to set up specific accounts in YNAB:
 
-1. **Bank account**: Both parties need to have an account named "Bank" in YNAB. This is the main account where the synced transactions will be created.
+1. **Bank account**: Both parties need to have an account in YNAB. The account name is "Bank" by default, or it can be specified as an environment variable. This is the main account where the synced transactions will be created.
 
 2. **Reimbursements account**: Both parties need a tracking liability account named "Reimbursements". This account will track how much each person owes the other.
 
@@ -43,7 +43,7 @@ This approach works best when both parties spend roughly similar amounts over ti
 
 ## Prerequisites
 
-- Two YNAB accounts (one for each person)
+- Two YNAB accounts (or two budgets in the same account) — one for each person
 - Python installed on your computer
 - Basic understanding of terminal/command line
 
@@ -67,6 +67,8 @@ PERSON2_API_KEY=[Person 2's API key]
 PERSON1_BUDGET_ID=[Person 1's budget ID]
 PERSON2_BUDGET_ID=[Person 2's budget ID]
 PERSON1_SPLIT=[Percentage split for Person 1]
+PERSON1_BANK_ACCOUNT=[Account name of Person 1's bank account. Optional, default is "Bank"]
+PERSON2_BANK_ACCOUNT=[Account name of Person 2's bank account. Optional, default is "Bank"]
 ```
 
 #### How to Get Your API Key
