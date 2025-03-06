@@ -14,6 +14,8 @@ PERSON2_API_KEY = os.getenv("PERSON2_API_KEY")
 PERSON1_BUDGET_ID = os.getenv("PERSON1_BUDGET_ID")
 PERSON2_BUDGET_ID = os.getenv("PERSON2_BUDGET_ID")
 PERSON1_SPLIT = os.getenv("PERSON1_SPLIT")
+PERSON1_BANK_ACCOUNT = os.getenv("PERSON1_BANK_ACCOUNT")
+PERSON2_BANK_ACCOUNT = os.getenv("PERSON2_BANK_ACCOUNT")
 
 class TerminalStyling:
     PURPLE = '\033[95m'
@@ -48,9 +50,19 @@ def get_budget(api_key, budget_id):
     category_reimbursements_id = ""
 
     for account in accounts:
-        if account["name"].lower() == "Bank".lower():
+        # Since we don't know whose budget we are getting, we compare
+        # the budget ID to the env variables to determine which budget we are getting.
+        # This avoids picking a conflicting account name in the budget.
+        if account["name"].lower() == PERSON1_BANK_ACCOUNT.lower() if budget_id == PERSON1_BUDGET_ID else PERSON2_BANK_ACCOUNT.lower(): 
             bank_account_id = account["id"]
             break
+    else: 
+        # for-else is weird but it actually makes sense here.
+        # If the for loop completes without breaking, then the account wasn't found
+        print(
+            f"unable to find a matching bank account ({PERSON1_BANK_ACCOUNT if budget_id == PERSON1_BUDGET_ID else PERSON2_BANK_ACCOUNT})"
+        )
+        exit(1)
 
     for payee in payees:
         if payee["name"] and "Reimbursements".lower() in payee["name"].lower():
@@ -358,10 +370,10 @@ def post_transactions(budget_id, api_key, transactions):
         print(response.text)
 
 if __name__ == "__main__":
-    if not all([PERSON1_API_KEY, PERSON2_API_KEY, PERSON1_BUDGET_ID, PERSON2_BUDGET_ID, PERSON1_SPLIT]):
+    if not all([PERSON1_API_KEY, PERSON2_API_KEY, PERSON1_BUDGET_ID, PERSON2_BUDGET_ID, PERSON1_SPLIT, PERSON1_BANK_ACCOUNT, PERSON2_BANK_ACCOUNT]):
         print(
             "Missing .env variables: "
-            "PERSON1_API_KEY, PERSON2_API_KEY, PERSON1_BUDGET_ID, PERSON2_BUDGET_ID, PERSON1_SPLIT"
+            "PERSON1_API_KEY, PERSON2_API_KEY, PERSON1_BUDGET_ID, PERSON2_BUDGET_ID, PERSON1_SPLIT, PERSON1_BANK_ACCOUNT, PERSON2_BANK_ACCOUNT"
         )
         sys.exit(1)
 
