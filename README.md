@@ -16,9 +16,9 @@ Before using this tool, both parties need to set up specific accounts in YNAB:
 
 1. **Bank account**: Both parties need to have an account in YNAB. The account name is "Bank" by default, or it can be specified as an environment variable. This is the main account where the synced transactions will be created.
 
-2. **Reimbursements account**: Both parties need a tracking liability account named "Reimbursements". This account will track how much each person owes the other.
+2. **Reimbursements account**: Both parties need a tracking liability account for reimbursements. The default name is "Reimbursements" but it can be specified with the REIMBURSEMENT_ACCOUNT environment variables. This account will track how much each person owes the other.
 
-3. **Reimbursements category**: Both parties need a category named "Reimbursements". This category is used for transfers between the Bank and Reimbursements accounts.
+3. **Reimbursements category**: Both parties need a category for reimbursements. By default this is named "Reimbursements" but it can be specified with the REIMBURSEMENT_CATEGORY environment variables. This category is used for transfers between the Bank and Reimbursements accounts.
 
 ### Understanding the Debt Balance
 

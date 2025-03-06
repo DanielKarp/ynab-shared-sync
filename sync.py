@@ -16,6 +16,10 @@ PERSON2_BUDGET_ID = os.getenv("PERSON2_BUDGET_ID")
 PERSON1_SPLIT = os.getenv("PERSON1_SPLIT")
 PERSON1_BANK_ACCOUNT = os.getenv("PERSON1_BANK_ACCOUNT", "Bank")
 PERSON2_BANK_ACCOUNT = os.getenv("PERSON2_BANK_ACCOUNT", "Bank")
+PERSON1_REIMBURSEMENT_ACCOUNT = os.getenv("PERSON1_REIMBURSEMENT_ACCOUNT", "Reimbursement")
+PERSON2_REIMBURSEMENT_ACCOUNT = os.getenv("PERSON2_REIMBURSEMENT_ACCOUNT", "Reimbursement")
+PERSON1_REIMBURSEMENT_CATEGORY = os.getenv("PERSON1_REIMBURSEMENT_CATEGORY", "Reimbursement")
+PERSON2_REIMBURSEMENT_CATEGORY = os.getenv("PERSON2_REIMBURSEMENT_CATEGORY", "Reimbursement")
 
 class TerminalStyling:
     PURPLE = '\033[95m'
@@ -65,14 +69,24 @@ def get_budget(api_key, budget_id):
         exit(1)
 
     for payee in payees:
-        if payee["name"] and "Reimbursements".lower() in payee["name"].lower():
+        if payee["name"] and ((PERSON1_REIMBURSEMENT_ACCOUNT.lower() if (budget_id == PERSON1_BUDGET_ID) else PERSON2_REIMBURSEMENT_ACCOUNT.lower()) in payee["name"].lower()):
             payee_reimbursements_id = payee["id"]
             break
+    else:
+        print(
+            f"unable to find a matching reimbursement account ({PERSON1_REIMBURSEMENT_ACCOUNT if budget_id == PERSON1_BUDGET_ID else PERSON2_REIMBURSEMENT_ACCOUNT})"
+        )
+        exit(1)
 
     for category in categories:
-        if category["name"] and "Reimbursements".lower() in category["name"].lower():
+        if category["name"] and ((PERSON1_REIMBURSEMENT_CATEGORY.lower() if (budget_id == PERSON1_BUDGET_ID) else PERSON2_REIMBURSEMENT_CATEGORY.lower()) in category["name"].lower()):
             category_reimbursements_id = category["id"]
             break
+    else:
+        print(
+            f"unable to find a matching reimbursement category ({PERSON1_REIMBURSEMENT_CATEGORY if budget_id == PERSON1_BUDGET_ID else PERSON2_REIMBURSEMENT_CATEGORY})"
+        )
+        exit(1)
 
     return bank_account_id, payees, categories, payee_reimbursements_id, category_reimbursements_id
 
